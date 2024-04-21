@@ -1,0 +1,112 @@
+package primeiroprojeto;
+
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author kaike
+ */
+public class trabalho {
+    public static void main(String[] args) {
+        int[] vetor = lerVetor();
+        exibirVetor("Vetor Original", vetor);
+
+        int opcao = exibirMenu();
+
+        int[] vetorOrdenado = null;
+        long tempoInicial = System.currentTimeMillis();
+
+        switch (opcao) {
+            case 1:
+                vetorOrdenado = ordenacaoPorInsercao(vetor.clone());
+                break;
+            case 2:
+                vetorOrdenado = ordenacaoPorSelecao(vetor.clone());
+                break;
+            case 3:
+                vetorOrdenado = ordenacaoBolha(vetor.clone());
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Opção inválida!");
+        }
+
+        long tempoFinal = System.currentTimeMillis();
+        long tempoExecucao = tempoFinal - tempoInicial;
+
+        exibirVetor("Vetor Original", vetor);
+        exibirVetor("Vetor Ordenado", vetorOrdenado);
+        JOptionPane.showMessageDialog(null, "Tempo de execução: " + tempoExecucao + " milissegundos");
+    }
+
+    public static int[] lerVetor() {
+        int tamanho = Integer.parseInt(JOptionPane.showInputDialog("Digite o tamanho do vetor:"));
+        int[] vetor = new int[tamanho];
+
+        for (int i = 0; i < tamanho; i++) {
+            vetor[i] = Integer.parseInt(JOptionPane.showInputDialog("Digite o elemento " + (i + 1) + ":"));
+        }
+
+        return vetor;
+    }
+
+    public static void exibirVetor(String titulo, int[] vetor) {
+        StringBuilder mensagem = new StringBuilder(titulo + ":\n");
+        for (int valor : vetor) {
+            mensagem.append(valor).append(" ");
+        }
+        JOptionPane.showMessageDialog(null, mensagem.toString());
+    }
+
+    public static int exibirMenu() {
+        String[] opcoes = {"Ordenação por Inserção", "Ordenação por Seleção", "Ordenação Bolha"};
+        int opcao = JOptionPane.showOptionDialog(null, "Escolha o método de ordenação:", "Menu",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, opcoes, opcoes[0]);
+        return opcao + 1;
+    }
+
+    public static int[] ordenacaoPorInsercao(int[] vetor) {
+        int n = vetor.length;
+        for (int i = 1; i < n; ++i) {
+            int chave = vetor[i];
+            int j = i - 1;
+
+            while (j >= 0 && vetor[j] > chave) {
+                vetor[j + 1] = vetor[j];
+                j = j - 1;
+            }
+            vetor[j + 1] = chave;
+        }
+        return vetor;
+    }
+
+    public static int[] ordenacaoPorSelecao(int[] vetor) {
+        int n = vetor.length;
+
+        for (int i = 0; i < n - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < n; j++) {
+                if (vetor[j] < vetor[minIndex]) {
+                    minIndex = j;
+                }
+            }
+            int temp = vetor[minIndex];
+            vetor[minIndex] = vetor[i];
+            vetor[i] = temp;
+        }
+        return vetor;
+    }
+
+    public static int[] ordenacaoBolha(int[] vetor) {
+        int n = vetor.length;
+        for (int i = 0; i < n - 1; i++)
+            for (int j = 0; j < n - i - 1; j++)
+                if (vetor[j] > vetor[j + 1]) {
+                    int temp = vetor[j];
+                    vetor[j] = vetor[j + 1];
+                    vetor[j + 1] = temp;
+                }
+        return vetor;
+    }
+    
+}
